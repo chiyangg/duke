@@ -9,6 +9,8 @@ public class Echo {
 
         Scanner sc = new Scanner(System.in);
         String userInput;
+        String[] tasks =  new String[100];
+        int taskCounter = 0;
 
         while (true) {
             userInput = sc.nextLine();
@@ -19,12 +21,23 @@ public class Echo {
                 System.out.println("___________________________________________");
                 break;
             }
-            else {
+            else if (userInput.equalsIgnoreCase("list")) {
                 System.out.println("___________________________________________");
-                System.out.println(userInput);
+                for (int i = 0; i < taskCounter; i++) {
+                    System.out.println(i+1 + ". " + tasks[i]);
+                }
+                System.out.println("___________________________________________");
+            }
+            else {
+                tasks[taskCounter] = userInput;
+                taskCounter++;
+                System.out.println("___________________________________________");
+                System.out.println("added: " + userInput);
                 System.out.println("___________________________________________");
             }
         }
+
+        sc.close();
 
 
     }
