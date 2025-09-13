@@ -9,7 +9,7 @@ public class Echo {
 
         Scanner sc = new Scanner(System.in);
         String userInput;
-        String[] tasks =  new String[100];
+        Task[] tasks =  new Task[100];
         int taskCounter = 0;
 
         while (true) {
@@ -28,8 +28,25 @@ public class Echo {
                 }
                 System.out.println("___________________________________________");
             }
+
+            else if (userInput.startsWith("mark ")) {
+                int index = Integer.parseInt(userInput.split(" ")[1]) - 1;
+                tasks[index].markAsDone();
+                System.out.println("___________________________________________");
+                System.out.println("Nice! I've marked this task as done:");
+                System.out.println("  " + tasks[index]);
+            }
+
+            else if (userInput.startsWith("unmark ")) {
+                int index = Integer.parseInt(userInput.split(" ")[1]) - 1;
+                tasks[index].markAsNotDone();
+                System.out.println("___________________________________________");
+                System.out.println("Nice! I've marked this task as not done yet:");
+                System.out.println("  " + tasks[index]);
+            }
+
             else {
-                tasks[taskCounter] = userInput;
+                tasks[taskCounter] = new Task(userInput);
                 taskCounter++;
                 System.out.println("___________________________________________");
                 System.out.println("added: " + userInput);
