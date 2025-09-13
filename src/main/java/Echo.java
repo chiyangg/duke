@@ -35,6 +35,7 @@ public class Echo {
                 System.out.println("___________________________________________");
                 System.out.println("Nice! I've marked this task as done:");
                 System.out.println("  " + tasks[index]);
+                System.out.println("___________________________________________");
             }
 
             else if (userInput.startsWith("unmark ")) {
@@ -43,6 +44,18 @@ public class Echo {
                 System.out.println("___________________________________________");
                 System.out.println("Nice! I've marked this task as not done yet:");
                 System.out.println("  " + tasks[index]);
+                System.out.println("___________________________________________");
+            }
+
+            else if (userInput.startsWith("todo ")) {
+                String description = userInput.substring(5).trim();
+                tasks[taskCounter] = new Todo(description);
+                taskCounter++;
+                System.out.println("___________________________________________");
+                System.out.println("Got it. I've added this task");
+                System.out.println("  " + tasks[taskCounter-1]);
+                System.out.println("Now you have " + taskCounter + " tasks in the list");
+                System.out.println("___________________________________________");
             }
 
             else {
