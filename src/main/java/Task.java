@@ -2,6 +2,7 @@ public class Task {
     protected String description;
     protected boolean isDone;
 
+
     public Task(String description) {
         this.description = description;
         this.isDone = false;
@@ -17,6 +18,10 @@ public class Task {
 
     public void markAsNotDone() {
         isDone = false;
+    }
+
+    public String addedMessage(int taskCounter) {
+        return "Got it. I've added this task: \n" + "  " +this + "\nNow you have " + taskCounter + " tasks in the list ";
     }
 
     @Override
