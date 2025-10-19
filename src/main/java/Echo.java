@@ -10,7 +10,8 @@ public class Echo {
 
         Scanner sc = new Scanner(System.in);
         String userInput;
-        ArrayList<Task> tasks = new ArrayList<>();
+        Storage storage = new Storage("./data/echo.txt");
+        ArrayList<Task> tasks = storage.load();
 
         while (true) {
             userInput = sc.nextLine();
@@ -47,11 +48,13 @@ public class Echo {
 
                         if (userInput.startsWith("mark ")) {
                             tasks.get(index).markAsDone();
+                            storage.save(tasks);
                             horizontalLine();
                             System.out.println("Nice! I've marked this task as done:");
                         }
                         else {
                             tasks.get(index).markAsNotDone();
+                            storage.save(tasks);
                             horizontalLine();
                             System.out.println("OK, I've marked this task as not done yet:");
                         }
@@ -70,6 +73,7 @@ public class Echo {
 
                     Task t = new Todo(description);
                     tasks.add(t);
+                    storage.save(tasks);
                     horizontalLine();
                     System.out.println(tasks.getLast().addedMessage(tasks.size()));
                     horizontalLine();
@@ -96,6 +100,7 @@ public class Echo {
 
                     Task t = new Deadline(description, by);
                     tasks.add(t);
+                    storage.save(tasks);
                     horizontalLine();
                     System.out.println(tasks.getLast().addedMessage(tasks.size()));
                     horizontalLine();
@@ -129,6 +134,7 @@ public class Echo {
 
                     Task t = new Event(description, from, to);
                     tasks.add(t);
+                    storage.save(tasks);
                     horizontalLine();
                     System.out.println(tasks.getLast().addedMessage(tasks.size()));
                     horizontalLine();
@@ -140,21 +146,32 @@ public class Echo {
                         throw new EchoException("Error: Task number is missing.");
                     }
 
-                    try {
-                        int index = Integer.parseInt(parts[1].trim()) - 1;
-                        if (index < 0 || index >= tasks.size()) {
-                            throw new EchoException("Error: Invalid task number.");
+                    if (parts[1].trim().equals("all")) {
+                        tasks.clear();
+                        storage.save(tasks);
+                        horizontalLine();
+                        System.out.println("All tasks have been removed.");
+                        horizontalLine();
+                    }
+
+                    else {
+                        try {
+                            int index = Integer.parseInt(parts[1].trim()) - 1;
+                            if (index < 0 || index >= tasks.size()) {
+                                throw new EchoException("Error: Invalid task number.");
+                            }
+
+                            Task removedTask = tasks.remove(index);
+                            storage.save(tasks);
+                            horizontalLine();
+                            System.out.println("Noted. I've removed this task:");
+                            System.out.println("  " + removedTask);
+                            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
+                            horizontalLine();
+
+                        } catch (NumberFormatException e) {
+                            throw new EchoException("Error: Task number must be an integer.");
                         }
-
-                        Task removedTask = tasks.remove(index);
-                        horizontalLine();
-                        System.out.println("Noted. I've removed this task:");
-                        System.out.println("  " + removedTask);
-                        System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                        horizontalLine();
-
-                    } catch (NumberFormatException e) {
-                        throw new EchoException("Error: Task number must be an integer.");
                     }
                 }
 
