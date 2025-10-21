@@ -2,16 +2,18 @@ import java.util.ArrayList;
 
 public class Echo {
     private Ui ui;
+    private Storage storage;
+    private TaskList tasks;
 
-    public Echo() {
+    public Echo(String filepath) {
         ui = new Ui();
+        storage = new Storage(filepath);
+        tasks = new TaskList(storage.load());
+
     }
     public void run() {
         ui.showWelcome();
-
         String userInput;
-        Storage storage = new Storage("./data/echo.txt");
-        ArrayList<Task> tasks = storage.load();
 
         while (true) {
             userInput = ui.readCommand();
@@ -25,7 +27,7 @@ public class Echo {
                 else if (userInput.equalsIgnoreCase("list")) {
                     horizontalLine();
                     for (int i = 0; i < tasks.size(); i++) {
-                        System.out.println((i + 1) + ". " + tasks.get(i));
+                        System.out.println((i + 1) + ". " + tasks.getTask(i));
                     }
                     horizontalLine();
                 }
@@ -45,18 +47,18 @@ public class Echo {
                         }
 
                         if (userInput.startsWith("mark ")) {
-                            tasks.get(index).markAsDone();
-                            storage.save(tasks);
+                            tasks.getTask(index).markAsDone();
+                            storage.save(tasks.getAll());
                             horizontalLine();
                             System.out.println("Nice! I've marked this task as done:");
                         }
                         else {
-                            tasks.get(index).markAsNotDone();
-                            storage.save(tasks);
+                            tasks.getTask(index).markAsNotDone();
+                            storage.save(tasks.getAll());
                             horizontalLine();
                             System.out.println("OK, I've marked this task as not done yet:");
                         }
-                        System.out.println("  " + tasks.get(index));
+                        System.out.println("  " + tasks.getTask(index));
                         horizontalLine();
 
                     } catch (NumberFormatException e) {
@@ -70,11 +72,8 @@ public class Echo {
                     if (description.isEmpty()) throw new EchoException("Error: Description is empty.");
 
                     Task t = new Todo(description);
-                    tasks.add(t);
-                    storage.save(tasks);
-                    horizontalLine();
-                    System.out.println(tasks.getLast().addedMessage(tasks.size()));
-                    horizontalLine();
+                    tasks.addTask(t);
+                    storage.save(tasks.getAll());
                 }
 
                 // DEADLINE
@@ -97,11 +96,8 @@ public class Echo {
                     }
 
                     Task t = new Deadline(description, by);
-                    tasks.add(t);
-                    storage.save(tasks);
-                    horizontalLine();
-                    System.out.println(tasks.getLast().addedMessage(tasks.size()));
-                    horizontalLine();
+                    tasks.addTask(t);
+                    storage.save(tasks.getAll());
                 }
 
                 // EVENT
@@ -131,12 +127,10 @@ public class Echo {
                     }
 
                     Task t = new Event(description, from, to);
-                    tasks.add(t);
-                    storage.save(tasks);
-                    horizontalLine();
-                    System.out.println(tasks.getLast().addedMessage(tasks.size()));
-                    horizontalLine();
+                    tasks.addTask(t);
+                    storage.save(tasks.getAll());
                 }
+
                 else if (userInput.startsWith("delete ")) {
                     String[] parts = userInput.split(" ");
 
@@ -145,11 +139,8 @@ public class Echo {
                     }
 
                     if (parts[1].trim().equals("all")) {
-                        tasks.clear();
-                        storage.save(tasks);
-                        horizontalLine();
-                        System.out.println("All tasks have been removed.");
-                        horizontalLine();
+                        tasks.clearTasks();
+                        storage.save(tasks.getAll());
                     }
 
                     else {
@@ -159,13 +150,8 @@ public class Echo {
                                 throw new EchoException("Error: Invalid task number.");
                             }
 
-                            Task removedTask = tasks.remove(index);
-                            storage.save(tasks);
-                            horizontalLine();
-                            System.out.println("Noted. I've removed this task:");
-                            System.out.println("  " + removedTask);
-                            System.out.println("Now you have " + tasks.size() + " tasks in the list.");
-                            horizontalLine();
+                            tasks.deleteTask(index);
+                            storage.save(tasks.getAll());
 
                         } catch (NumberFormatException e) {
                             throw new EchoException("Error: Task number must be an integer.");
@@ -193,7 +179,7 @@ public class Echo {
         }
     }
     public static void main(String[] args) {
-        new Echo().run();
+        new Echo("./data/echo.txt").run();
 
     }
 
