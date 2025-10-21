@@ -1,4 +1,6 @@
-public class Event extends Task{
+package echo;
+
+public class Event extends Task {
 
     protected String from;
     protected String to;

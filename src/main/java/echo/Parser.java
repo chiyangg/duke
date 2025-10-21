@@ -1,3 +1,5 @@
+package echo;
+
 public class Parser {
     public static Task parseTask(String line) {
         String[] parts = line.split(" \\| ");
