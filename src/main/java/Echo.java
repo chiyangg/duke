@@ -1,26 +1,24 @@
 import java.util.ArrayList;
-import java.util.Scanner;
 
 public class Echo {
-    public static void main(String[] args) {
-        horizontalLine();
-        System.out.println("Hello! I'm Echo");
-        System.out.println("What can I do for you?");
-        horizontalLine();
+    private Ui ui;
 
-        Scanner sc = new Scanner(System.in);
+    public Echo() {
+        ui = new Ui();
+    }
+    public void run() {
+        ui.showWelcome();
+
         String userInput;
         Storage storage = new Storage("./data/echo.txt");
         ArrayList<Task> tasks = storage.load();
 
         while (true) {
-            userInput = sc.nextLine();
+            userInput = ui.readCommand();
 
             try {
                 if (userInput.equalsIgnoreCase("bye")) {
-                    horizontalLine();
-                    System.out.println("Bye. Hope to see you again soon!");
-                    horizontalLine();
+                    ui.showBye();
                     break;
                 }
 
@@ -190,13 +188,13 @@ public class Echo {
                 }
 
             } catch (EchoException e) {
-                horizontalLine();
-                System.out.println(e.getMessage());
-                horizontalLine();
+                ui.showError(e.getMessage());
             }
         }
+    }
+    public static void main(String[] args) {
+        new Echo().run();
 
-        sc.close();
     }
 
     public static void horizontalLine() {
