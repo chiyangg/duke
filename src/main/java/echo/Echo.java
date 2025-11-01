@@ -51,8 +51,7 @@ public class Echo {
                             storage.save(tasks.getAll());
                             horizontalLine();
                             System.out.println("Nice! I've marked this task as done:");
-                        }
-                        else {
+                        } else {
                             tasks.getTask(index).markAsNotDone();
                             storage.save(tasks.getAll());
                             horizontalLine();
@@ -141,9 +140,7 @@ public class Echo {
                     if (parts[1].trim().equals("all")) {
                         tasks.clearTasks();
                         storage.save(tasks.getAll());
-                    }
-
-                    else {
+                    } else {
                         try {
                             int index = Integer.parseInt(parts[1].trim()) - 1;
                             if (index < 0 || index >= tasks.size()) {
@@ -157,15 +154,12 @@ public class Echo {
                             throw new EchoException("Error: Task number must be an integer.");
                         }
                     }
-                }
-
-                // INVALID COMMAND
-                else {
+                } else {
                     throw new EchoException("""
                             Error: Command not recognized. Available commands:
                             - todo <description>
-                            - deadline <description> /by <time>
-                            - event <description> /from <time> /to <time>
+                            - deadline <description> /by <yyyy-MM-dd HHmm>
+                            - event <description> /from <yyyy-MM-dd HHmm> /to <yyyy-MM-dd HHmm>
                             - list
                             - mark <index>
                             - unmark <index>

@@ -9,8 +9,8 @@ public class Parser {
 
         Task task = switch (type) {
             case "T" -> new Todo(description);
-            case "D" -> new Deadline(description, parts[3]);
-            case "E" -> new Event(description, parts[3], parts[4]);
+            case "D" -> new Deadline(description, parts[3].trim());
+            case "E" -> new Event(description, parts[3].trim(), parts[4].trim());
             default -> throw new IllegalArgumentException("Unknown task type" + type);
         };
 
